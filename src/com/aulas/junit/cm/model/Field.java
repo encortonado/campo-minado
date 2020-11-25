@@ -3,6 +3,8 @@ package com.aulas.junit.cm.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aulas.junit.cm.exception.ExplosionException;
+
 public class Field {
 
 	private final int x; // linha
@@ -19,6 +21,30 @@ public class Field {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+
+	public boolean isOpened() {
+		return opened;
+	}
+
+	public void setOpened(boolean opened) {
+		this.opened = opened;
+	}
+
+	public boolean isMined() {
+		return mined;
+	}
+
+	public void setMined(boolean mined) {
+		this.mined = mined;
+	}
+
+	public boolean isMarked() {
+		return marked;
+	}
+
+	public void setMarked(boolean marked) {
+		this.marked = marked;
 	}
 
 	boolean addNeighbor(Field neighbor) {
@@ -40,6 +66,46 @@ public class Field {
 			return false;
 		}
 	}
+
+	void alternateMarking() {
+		if (!opened) {
+			marked = !marked;
+		}
+	}
+
+	boolean open() {
+
+		if (!opened && !marked) {
+			opened = true;
+
+			if (mined) {
+				throw new ExplosionException();
+
+			}
+
+			if (safeNeighborhood()) {
+				neighbors.forEach(neighbor -> neighbor.open()); 
+				// pra cada vizinho ele reabre e verifica se tem mais vizinhos ao redor
+
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	boolean safeNeighborhood() { // garante que nenhum bloco vizinho sera uma bomba
+		return neighbors.stream().noneMatch(x -> x.mined); // nenhum valor pode ser igual ao minado
+	}
+	
+	void mining() {
+			mined = true;
+	}
+
+	
+	
 }
 
 
