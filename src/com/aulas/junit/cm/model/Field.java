@@ -46,7 +46,16 @@ public class Field {
 	public void setMarked(boolean marked) {
 		this.marked = marked;
 	}
+	
+	public int getX() {
+		return x;
+	}
 
+	public int getY() {
+		return y;
+	}
+
+	
 	boolean addNeighbor(Field neighbor) {
 		boolean xDifferent = x != neighbor.x; // se x é diferente do x vizinho
 		boolean yDifferent = y != neighbor.y; // se y é diferente do y vizinho
@@ -104,8 +113,35 @@ public class Field {
 			mined = true;
 	}
 
+	boolean objectiveAcomplished() {
+		boolean uncovered = !mined && opened; // campo que fora desvendado
+		boolean locked = mined && marked; // campo protegido
+		return uncovered || locked;
+	}
 	
+	long minesNeighbored() {
+		return neighbors.stream().filter(neighbor -> neighbor.mined).count();
+	}
 	
+	void reestart() {
+		opened = false;
+		mined = false;
+		marked = false;
+	}
+	
+	public String toString() {
+		if (marked) {
+			return "x";
+		}else if (opened && mined) {
+			return "*";
+		} else if (opened && minesNeighbored() > 0) {
+			return Long.toString(minesNeighbored());
+		} else if (opened) {
+			return " ";
+		} else {
+			return "?";
+		}
+	}
 }
 
 

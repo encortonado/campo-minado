@@ -1,5 +1,6 @@
 package com.aulas.junit.cm.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -226,6 +227,150 @@ class FieldTest {
 		field.setMarked(true);
 		
 		assertTrue(field.isMarked());
+	}
+	
+	@Test
+	void testGetX() {
+		/* <><> Montagem do Cenário <><> */
+		Field field = new Field(2, 3);
+		/* <><> Execução <><> */
+		
+		
+		assertEquals(2, field.getX());
+	}
+	
+	@Test
+	void testGetY() {
+		/* <><> Montagem do Cenário <><> */
+		Field field = new Field(2, 3);
+		/* <><> Execução <><> */
+		
+		
+		assertEquals(3, field.getY());
+	}
+	
+	@Test
+	void testObjectiveAcomplishedUncovered() {
+		/* <><> Montagem do Cenário <><> */
+		field.open();
+		
+		/* <><> Execução <><> */
+		field.objectiveAcomplished();
+		
+		assertTrue(field.objectiveAcomplished());
+	}
+	
+	@Test
+	void testObjectiveAcomplishedLocked() {
+		/* <><> Montagem do Cenário <><> */
+		field.alternateMarking();
+		field.mining();
+		/* <><> Execução <><> */
+		field.objectiveAcomplished();
+		
+		assertTrue(field.objectiveAcomplished());
+	}
+	
+	@Test
+	void testMinesNeighbored() {
+		/* <><> Montagem do Cenário <><> */
+		
+		Field field11 = new Field(1, 1);
+		Field field12 = new Field(1, 2);
+		
+		Field field22 = new Field(2, 2); // vizinho field 22
+		Field field23 = new Field(2, 3);
+		field.addNeighbor(field22);
+		field.addNeighbor(field23);
+		
+		field.addNeighbor(field11);
+		field.addNeighbor(field12);
+		
+		/* <><> Execução <><> */
+		field22.mining();
+		field23.mining();
+		
+		
+		assertEquals(2, field.minesNeighbored());
+	}
+	
+	@Test
+	void testReestart() {
+		/* <><> Montagem do Cenário <><> */
+		field.alternateMarking();
+		field.mining();
+		field.open();
+		
+		/* <><> Execução <><> */
+		field.reestart();
+		
+		assertFalse(field.isMarked() && field.isMined() && field.isOpened());
+		
+	}
+	
+	@Test
+	void testToStringMarked() {
+		/* <><> Montagem do Cenário <><> */
+		field.alternateMarking();
+		/* <><> Execução <><> */
+		assertEquals("x", field.toString());
+		
+	}
+	
+	@Test
+	void testToStringOpenedMined() {
+		/* <><> Montagem do Cenário <><> */
+		field.open();
+		field.mining();
+		/* <><> Execução <><> */
+		assertEquals("*", field.toString());
+		
+	}
+	
+	@Test
+	void testToStringOpenedMinesNeighbored() {
+		/* <><> Montagem do Cenário <><> */
+		Field field11 = new Field(1, 1);
+		Field field12 = new Field(1, 2);
+		
+		Field field22 = new Field(2, 2); // vizinho field 22
+		Field field23 = new Field(2, 3);
+		field.addNeighbor(field22);
+		field.addNeighbor(field23);
+		
+		field.addNeighbor(field11);
+		field.addNeighbor(field12);
+		
+		/* <><> Execução <><> */
+		field22.mining();
+		field23.mining();
+		
+		field.open();
+		field.minesNeighbored();
+		
+		/* <><> Execução <><> */
+		
+		assertEquals(Long.toString(2), field.toString());
+		
+	}
+	
+	@Test
+	void testToStringOpened() {
+		/* <><> Montagem do Cenário <><> */
+		field.open();
+		
+		/* <><> Execução <><> */
+		assertEquals(" ", field.toString());
+		
+	}
+	
+	@Test
+	void testToStringElse() {
+		/* <><> Montagem do Cenário <><> */
+		field.reestart();
+		/* <><> Execução <><> */
+		assertEquals("?", field.toString());
+		
 	}
 }
 
