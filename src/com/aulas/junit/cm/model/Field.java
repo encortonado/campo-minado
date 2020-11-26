@@ -15,10 +15,10 @@ public class Field {
 	private boolean marked = false;
 
 	// Vizinhos de campos com minas proximas, que podem ser eliminados
-	private List<Field> neighbors = new ArrayList<Field>();
+	private List<Field> neighbors = new ArrayList<>();
 
-	public Field(int x, int y) {
-		super();
+	Field(int x, int y) {
+		
 		this.x = x;
 		this.y = y;
 	}
@@ -63,7 +63,7 @@ public class Field {
 
 		int deltaX = Math.abs(x - neighbor.x); // verifica a diferença absoluta entre x e x do vizinho
 		int deltaY = Math.abs(y - neighbor.y); // verifica a diferença absoluta entre y e y do vizinho
-		int deltaGeneral = deltaX + deltaY; // verifica a diferença geral entre xy e xy do vizinho
+		int deltaGeneral = deltaY + deltaX; // verifica a diferença geral entre xy e xy do vizinho
 
 		if (deltaGeneral == 1 && !diagonal) { // se o delta geral é 1 e nao está na diagonal, adiciona o vizinho
 			neighbors.add(neighbor);
@@ -132,7 +132,7 @@ public class Field {
 	public String toString() {
 		if (marked) {
 			return "x";
-		}else if (opened && mined) {
+		} else if (opened && mined) {
 			return "*";
 		} else if (opened && minesNeighbored() > 0) {
 			return Long.toString(minesNeighbored());
